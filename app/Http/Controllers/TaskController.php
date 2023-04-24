@@ -12,7 +12,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::user()->id)->latest('updated_at')->get();
+        $tasks = Task::where('user_id', Auth::user()->id)->latest('updated_at')->paginate(1);
         return view('tasks.index')->with('tasks', $tasks);
 
 
@@ -23,7 +23,8 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
+
     }
 
     /**
@@ -31,7 +32,23 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:120',
+            'text' => 'required',
+            'deadline' => 'required'
+        ]);
+
+        $task = new Task([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'text' => $request->text,
+            'deadline' => $request->deadline
+        ]);
+        $task->save();
+
+        return to_route('tasks.index');
+
+
     }
 
     /**
@@ -39,7 +56,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return view('tasks.show')->with('task', $task);
     }
 
     /**
