@@ -15,6 +15,15 @@
                 <p class="opacity-70 ml-8">
                     <strong>Updated at: </strong> {{ $task->updated_at->diffForHumans() }}
                 </p>
+                <a href="{{ route('tasks.edit', $task) }}"
+                   class="btn-link ml-auto">Edit Task</a>
+                <form action="{{ route('tasks.destroy', $task) }}" method="post">
+                    @method('delete')
+                    @csrf
+                    <button type="submit" class="btn btn-danger ml-4" onclick="return confirm('Are you sure you wish to delete this task?')">Delete Task</button>
+                </form>
+
+
             </div>
 
 

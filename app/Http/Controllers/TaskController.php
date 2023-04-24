@@ -64,7 +64,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('tasks.edit')->with('task', $task);
     }
 
     /**
@@ -72,14 +72,28 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
-    }
+        $request->validate([
+            'title' => 'required|max:120',
+            'text' => 'required',
+            'deadline' => 'required'
+        ]);
+
+        $task->update([
+            'title' => $request->title,
+            'text' => $request->text,
+            'deadline' => $request->deadline
+        ]);
+
+        return to_route('tasks.show', $task);
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return to_route('tasks.index');
+
     }
 }
